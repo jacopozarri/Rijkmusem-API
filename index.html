@@ -32,6 +32,7 @@
     }
 
     #rangeinput {
+      cursor: pointer;
       width: 50%;
     }
 
@@ -40,7 +41,7 @@
     }
 
     button {
-      color: #00f;
+      color: #4169e1;
       cursor: pointer;
       background: white;
       border: solid 0;
@@ -64,7 +65,7 @@
     <h1>Rijksmuseum Collection</h1>
     <p>Enter Keywords</p>
     <input type="search" />
-    <input id="rangeinput" type="range" min="1" max="100" value="100" />
+    <input id="rangeinput" max="100" min="1" value="100" type="range" />
     <output id="rangeval"></output>
     <button>Search</button>
   </div>
@@ -133,7 +134,7 @@
           positionnew = 10 - valuenew * 0.2;
         if (rang.value < 2) {
           rangv.innerHTML = `<span>Show ${rang.value} Photo</span>`;
-        } else rangv.innerHTML = `<span>Show ${rang.value} Photos</span>`; 
+        } else rangv.innerHTML = `<span>Show ${rang.value} Photos</span>`;
       };
     document.addEventListener("DOMContentLoaded", valueset);
     rang.addEventListener("input", valueset);
