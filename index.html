@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <title>Rijksmuseum Collection</title>
+  <link href="logo.jpg" rel="icon" type="image/png" />
+  <style>
+    body {
+      margin: 0;
+      text-align: center;
+    }
+
+    #box1 {
+      background: linear-gradient(to bottom, #4a94ec, white);
+      padding: 60px;
+    }
+
+    h1 {
+      font: 40px Verdana, sans-serif;
+    }
+
+    p {
+      font: 18px Verdana, sans-serif;
+    }
+
+    input {
+      display: block;
+      margin: 20px auto;
+      width: 75%;
+    }
+
+    #rangeinput {
+      width: 50%;
+    }
+
+    span {
+      color: #dc143c;
+    }
+
+    button {
+      color: #00f;
+      cursor: pointer;
+      background: white;
+      border: solid 0;
+      border-radius: 25px;
+      display: block;
+      font: 15px Verdana, sans-serif;
+      margin: 20px auto;
+    }
+
+    img {
+      display: block;
+      margin: auto;
+      max-height: 100vh;
+      max-width: 100vw;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="box1">
+    <h1>Rijksmuseum Collection</h1>
+    <p>Enter Keywords</p>
+    <input type="search" />
+    <input id="rangeinput" type="range" min="1" max="100" value="100" />
+    <output id="rangeval"></output>
+    <button>Search</button>
+  </div>
+  <div id="box2"></div>
+  <script
+    src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js">
+  </script>
+  <script>
+    let keyapi = "?key=jr1dt3gq";
+    let urlbase = "https://www.rijksmuseum.nl/api/en/collection/";
+    let srctherm = "&imgonly=true&format=json&q=";
+    let srcbar = document.querySelector("input");
+    let button = document.querySelector("button");
+    let src = function (evt) {
+      let input2 = "&ps=" + document.querySelector("#rangeinput").value;
+      let inputele = evt.target;
+      if (evt.keyCode === 13) {
+        let inputuser = inputele.value;
+        inputele.value = "";
+        let urlfull = urlbase + keyapi + input2 + srctherm + inputuser;
+        console.log(urlfull);
+        let jqueyajax = $.getJSON(urlfull);
+        jqueyajax.then(show);
+      }
+    };
+    let src2 = function () {
+      let input2 = "&ps=" + document.querySelector("#rangeinput").value;
+      let inputele = document.querySelector("input");
+      let inputuser = document.querySelector("input").value;
+      inputele.value = "";
+      let urlfull = urlbase + keyapi + input2 + srctherm + inputuser;
+      console.log(urlfull);
+      let jqueryajax = $.getJSON(urlfull);
+      jqueryajax.then(show);
+    };
+    let show = function (data) {
+      let string = "";
+      let array = data.artObjects;
+      console.log(data);
+      let container = document.querySelector("#box2");
+      for (var i = 0; i < array.length; i++) {
+        imgObj = array[i];
+        string += object(imgObj);
+      }
+      container.innerHTML = string;
+      console.log(string);
+    };
+    let object = function (imgobject) {
+      let url = imgobject.webImage.url;
+      let description = imgobject.longTitle;
+      let maker = imgobject.principalOrFirstMaker;
+      console.log(imgobject.webImage);
+      console.log(url);
+      let image =
+        '<img src="' + url + '">' + "<h2>" + imgobject.longTitle + "</h2>";
+      return image;
+    };
+    srcbar.addEventListener("keydown", src);
+    button.addEventListener("click", src2);
+    let rang = document.querySelector("#rangeinput"),
+      rangv = document.querySelector("#rangeval"),
+      valueset = function () {
+        let valuenew = Number(
+            ((rang.value - rang.min) * 100) / (rang.max - rang.min)
+          ),
+          positionnew = 10 - valuenew * 0.2;
+        if (rang.value < 2) {
+          rangv.innerHTML = `<span>Show ${rang.value} Photo</span>`;
+        } else rangv.innerHTML = `<span>Show ${rang.value} Photos</span>`; 
+      };
+    document.addEventListener("DOMContentLoaded", valueset);
+    rang.addEventListener("input", valueset);
+  </script>
+</body>
+
+</html>
